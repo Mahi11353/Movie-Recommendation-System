@@ -4,9 +4,17 @@ import pandas as pd
 import requests
 import time
 
-# --- Load data ---
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+# Load movies.pkl
 movies = pickle.load(open('movies.pickle', 'rb'))
-similarity = pickle.load(open('similarity.pkl', 'rb'))
+
+# Recompute similarity matrix
+cv = CountVectorizer(max_features=5000, stop_words='english')
+vectors = cv.fit_transform(movies['tags']).toarray()
+similarity = cosine_similarity(vectors)
+
 
 # --- Streamlit UI ---
 st.title("🎬 Movie Recommender System")
